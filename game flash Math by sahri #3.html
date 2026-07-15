@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Hub - by Sahri Ramadhan</title>
+    <style>
+        /* Desain Dasar & Tema Minimalis Modern */
+        :root {
+            --primary: #4ade80;
+            --bg-dark: #121212;
+            --surface: #1e1e1e;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #333333;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 40px 40px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigasi */
+        nav {
+            background-color: rgba(30, 30, 30, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+
+        .menu {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            color: var(--primary);
+        }
+
+        /* Konten Utama */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--surface);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 { margin-top: 0; }
+        
+        /* Elemen UI Umum */
+        button.btn {
+            background-color: var(--primary);
+            color: #121212;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        button.btn:hover { opacity: 0.9; transform: scale(1.02); }
+        
+        input.text-input {
+            padding: 12px;
+            font-size: 1.2rem;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            width: 150px;
+            margin-right: 10px;
+        }
+
+        input.text-input::placeholder {
+            color: #666;
+        }
+
+        /* Desain Khusus Halaman Game */
+        #game-display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            min-height: 120px;
+            color: var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Desain Khusus Kalkulator */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        #calc-display {
+            grid-column: span 4;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 2rem;
+            text-align: right;
+            color: white;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        .calc-btn {
+            background-color: #2a2a2a;
+            border: none;
+            padding: 20px;
+            font-size: 1.2rem;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .calc-btn:hover { background-color: #3a3a3a; }
+        .calc-btn.op { background-color: #3b82f6; }
+        .calc-btn.op:hover { background-color: #2563eb; }
+        .calc-btn.eq { background-color: var(--primary); color: #121212; font-weight: bold;}
+        .calc-btn.eq:hover { background-color: #22c55e; }
+
+        /* Desain Khusus History */
+        .history-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            white-space: nowrap;
+        }
+        th { color: var(--text-muted); }
+        .status-win { color: var(--primary); font-weight: bold; }
+        .status-lose { color: #ef4444; font-weight: bold; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background-color: rgba(30,30,30,0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">∑ Math Hub</div>
+        <div class="menu">
+            <div class="menu-item active" onclick="switchPage('beranda', this)">Beranda</div>
+            <div class="menu-item" onclick="switchPage('game', this)">Game</div>
+            <div class="menu-item" onclick="switchPage('kalkulator', this)">Kalkulator</div>
+            <div class="menu-item" onclick="switchPage('history', this)">History</div>
+            <div class="menu-item" onclick="switchPage('tentang', this)">Tentang</div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HALAMAN BERANDA -->
+        <section id="beranda" class="page active">
+            <h2>Selamat Datang di Math Hub</h2>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                Platform cerdas untuk mengasah kemampuan otak dan perhitungan matematis Anda. 
+                Desain minimalis dan modern untuk fokus maksimal.
+            </p>
+            <div style="font-size: 3rem; margin: 2rem 0; color: var(--border);">∫ π √</div>
+            <button class="btn" onclick="document.querySelector('.menu-item:nth-child(2)').click()">Mulai Bermain Flash Math</button>
+        </section>
+
+        <!-- HALAMAN GAME -->
+        <section id="game" class="page">
+            <h2>⚡ Flash Math</h2>
+            <p style="color: var(--text-muted);">10 Operasi | Jeda 4 Detik</p>
+            
+            <div id="player-setup" style="margin: 20px 0;">
+                <input type="text" id="player-name" class="text-input" placeholder="Masukkan Nama Kamu..." style="width: 250px; text-align: center;">
+            </div>
+
+            <div id="game-display">Siap?</div>
+            
+            <button id="start-btn" class="btn" onclick="startGame()">Mulai Game</button>
+            
+            <div id="input-area" style="display: none; margin-top: 20px;">
+                <input type="number" id="user-answer" class="text-input" placeholder="Jawaban..." onkeypress="if(event.key === 'Enter') checkAnswer()">
+                <button class="btn" onclick="checkAnswer()">Cek Jawaban</button>
+            </div>
+            
+            <div id="game-result" style="margin-top: 20px; font-size: 1.2rem;"></div>
+        </section>
+
+        <!-- HALAMAN KALKULATOR -->
+        <section id="kalkulator" class="page">
+            <h2>Kalkulator Minimalis</h2>
+            <div id="calc-display">0</div>
+            <div class="calc-grid">
+                <button class="calc-btn op" onclick="calcInput('C')">C</button>
+                <button class="calc-btn op" onclick="calcInput('(')">(</button>
+                <button class="calc-btn op" onclick="calcInput(')')">)</button>
+                <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+                
+                <button class="calc-btn" onclick="calcInput('7')">7</button>
+                <button class="calc-btn" onclick="calcInput('8')">8</button>
+                <button class="calc-btn" onclick="calcInput('9')">9</button>
+                <button class="calc-btn op" onclick="calcInput('*')">×</button>
+                
+                <button class="calc-btn" onclick="calcInput('4')">4</button>
+                <button class="calc-btn" onclick="calcInput('5')">5</button>
+                <button class="calc-btn" onclick="calcInput('6')">6</button>
+                <button class="calc-btn op" onclick="calcInput('-')">-</button>
+                
+                <button class="calc-btn" onclick="calcInput('1')">1</button>
+                <button class="calc-btn" onclick="calcInput('2')">2</button>
+                <button class="calc-btn" onclick="calcInput('3')">3</button>
+                <button class="calc-btn op" onclick="calcInput('+')">+</button>
+                
+                <button class="calc-btn" onclick="calcInput('0')" style="grid-column: span 2;">0</button>
+                <button class="calc-btn" onclick="calcInput('.')">.</button>
+                <button class="calc-btn eq" onclick="calcInput('=')">=</button>
+            </div>
+        </section>
+
+        <!-- HALAMAN HISTORY -->
+        <section id="history" class="page">
+            <h2>Riwayat Permainan</h2>
+            <div class="history-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu</th>
+                            <th>Pemain</th>
+                            <th>Target</th>
+                            <th>Jawaban</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- History akan diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <p id="no-history" style="color: var(--text-muted); margin-top: 2rem;">Belum ada data permainan.</p>
+        </section>
+
+        <!-- HALAMAN TENTANG -->
+        <section id="tentang" class="page">
+            <h2>Tentang Web Ini</h2>
+            <div style="margin: 2rem 0; font-size: 4rem;">💻</div>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                Website ini dibuat sebagai perpaduan antara logika matematika dan keindahan desain antarmuka. 
+                Didedikasikan untuk melatih fokus, kecepatan berhitung, dan efisiensi waktu.
+            </p>
+            <br>
+            <h3 style="color: var(--primary);">Dibuat oleh: Sahri Ramadhan</h3>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 Math Hub | Didesain oleh Sahri Ramadhan
+    </footer>
+
+    <script>
+        // Variabel untuk mengecek apakah game sedang berjalan (Anti-Curang)
+        let isGameRunning = false; 
+
+        // --- LOGIKA NAVIGASI ---
+        function switchPage(pageId, element) {
+            // FITUR ANTI-CURANG: Cegah buka kalkulator jika game belum selesai dijawab
+            if (isGameRunning && pageId === 'kalkulator') {
+                alert("🚨 Hei " + currentPlayer + "! Tidak boleh curang buka kalkulator! Jawab dulu soalnya! 😜");
+                return; // Batalkan perpindahan halaman
+            }
+
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // --- LOGIKA GAME FLASH MATH ---
+        let sequence = [];
+        let finalAnswer = 0;
+        let currentIndex = 0;
+        let intervalId;
+        let gameHistory = [];
+        let currentPlayer = "";
+
+        function generateSequence() {
+            sequence = [];
+            let currentNumber = Math.floor(Math.random() * 200) + 1;
+            sequence.push(currentNumber.toString());
+
+            for(let i = 0; i < 10; i++) {
+                let ops = ['+', '-', '*', '/'];
+                let op = ops[Math.floor(Math.random() * ops.length)];
+
+                if (op === '/') {
+                    let div2 = (currentNumber % 2 === 0);
+                    let div3 = (currentNumber % 3 === 0);
+                    
+                    if (div2 && div3) {
+                        let val = Math.random() < 0.5 ? 2 : 3;
+                        sequence.push(`/ ${val}`);
+                        currentNumber /= val;
+                    } else if (div2) {
+                        sequence.push(`/ 2`);
+                        currentNumber /= 2;
+                    } else if (div3) {
+                        sequence.push(`/ 3`);
+                        currentNumber /= 3;
+                    } else {
+                        op = Math.random() < 0.5 ? '+' : '-';
+                    }
+                }
+
+                if (op === '+') {
+                    let val = Math.floor(Math.random() * 200) + 1;
+                    sequence.push(`+ ${val}`);
+                    currentNumber += val;
+                } else if (op === '-') {
+                    let val = Math.floor(Math.random() * 200) + 1;
+                    sequence.push(`- ${val}`);
+                    currentNumber -= val;
+                } else if (op === '*') {
+                    let val = Math.floor(Math.random() * 2) + 2; 
+                    sequence.push(`x ${val}`);
+                    currentNumber *= val;
+                }
+            }
+            finalAnswer = currentNumber;
+        }
+
+        function startGame() {
+            let nameInput = document.getElementById('player-name').value.trim();
+            if(nameInput === "") {
+                alert("Hei, masukkan nama kamu dulu sebelum mulai bermain!");
+                document.getElementById('player-name').focus();
+                return;
+            }
+            currentPlayer = nameInput;
+
+            // AKTIFKAN STATUS GAME BERJALAN (Kalkulator akan dikunci)
+            isGameRunning = true; 
+
+            document.getElementById('player-setup').style.display = 'none';
+            document.getElementById('start-btn').style.display = 'none';
+            document.getElementById('input-area').style.display = 'none';
+            document.getElementById('game-result').innerHTML = '';
+            document.getElementById('user-answer').value = '';
+            
+            generateSequence();
+            currentIndex = 0;
+            
+            document.getElementById('game-display').innerHTML = sequence[currentIndex];
+            currentIndex++;
+
+            intervalId = setInterval(() => {
+                if(currentIndex < sequence.length) {
+                    document.getElementById('game-display').innerHTML = sequence[currentIndex];
+                    currentIndex++;
+                } else {
+                    clearInterval(intervalId);
+                    document.getElementById('game-display').innerHTML = "Berapa hasilnya?";
+                    document.getElementById('input-area').style.display = 'block';
+                    document.getElementById('user-answer').focus();
+                }
+            }, 4000);
+        }
+
+        function checkAnswer() {
+            let userAnswerStr = document.getElementById('user-answer').value;
+            if(userAnswerStr === '') return;
+            
+            let userAnswer = parseInt(userAnswerStr);
+            let resultDiv = document.getElementById('game-result');
+            let isWin = (userAnswer === finalAnswer);
+            
+            if(isWin) {
+                resultDiv.innerHTML = `✅ Tepat Sekali, ${currentPlayer}! Hasilnya: ` + finalAnswer;
+                resultDiv.style.color = "var(--primary)";
+            } else {
+                resultDiv.innerHTML = `❌ Kurang Tepat, ${currentPlayer}. Jawaban: ` + finalAnswer;
+                resultDiv.style.color = "#ef4444";
+            }
+            
+            // SIMPAN KE HISTORY
+            let time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            gameHistory.push({ time, name: currentPlayer, target: finalAnswer, answer: userAnswer, isWin });
+            updateHistoryUI();
+
+            document.getElementById('player-setup').style.display = 'block';
+            document.getElementById('start-btn').style.display = 'inline-block';
+            document.getElementById('start-btn').innerHTML = 'Main Lagi';
+            document.getElementById('input-area').style.display = 'none';
+
+            // GAME SELESAI, BUKA KUNCI KALKULATOR
+            isGameRunning = false;
+        }
+
+        function updateHistoryUI() {
+            let tbody = document.getElementById('history-body');
+            let noHistory = document.getElementById('no-history');
+            
+            if(gameHistory.length > 0) {
+                noHistory.style.display = 'none';
+            }
+
+            tbody.innerHTML = '';
+            [...gameHistory].reverse().forEach(item => {
+                let statusHtml = item.isWin ? '<span class="status-win">Menang</span>' : '<span class="status-lose">Kalah</span>';
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.time}</td>
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.target}</td>
+                    <td>${item.answer}</td>
+                    <td>${statusHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- LOGIKA KALKULATOR ---
+        let calcVal = '';
+        function calcInput(val) {
+            let display = document.getElementById('calc-display');
+            
+            if(val === 'C') {
+                calcVal = '';
+                display.innerText = '0';
+            } else if(val === '=') {
+                try {
+                    let result = eval(calcVal);
+                    if(result % 1 !== 0) result = result.toFixed(4); 
+                    display.innerText = result;
+                    calcVal = result.toString();
+                } catch(e) {
+                    display.innerText = 'Error';
+                    calcVal = '';
+                }
+            } else {
+                calcVal += val;
+                display.innerText = calcVal;
+            }
+        }
+    </script>
+</body>
+</html>
